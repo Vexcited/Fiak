@@ -1,0 +1,161 @@
+Index: Fiak/yaak/src-tauri/src/window.rs
+===================================================================
+--- Fiak.orig/yaak/src-tauri/src/window.rs
++++ Fiak/yaak/src-tauri/src/window.rs
+@@ -198,7 +198,7 @@ pub(crate) fn create_main_window(handle:
+     let config = CreateWindowConfig {
+         url,
+         label: label.as_str(),
+-        title: "Yaak",
++        title: "Fiak",
+         inner_size: Some((DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)),
+         position: Some((
+             // Offset by random amount so it's easier to differentiate
+Index: Fiak/yaak/src-tauri/yaak-common/src/api_client.rs
+===================================================================
+--- Fiak.orig/yaak/src-tauri/yaak-common/src/api_client.rs
++++ Fiak/yaak/src-tauri/yaak-common/src/api_client.rs
+@@ -9,7 +9,7 @@ pub fn yaak_api_client<R: Runtime>(app_h
+     let platform = get_ua_platform();
+     let version = app_handle.package_info().version.clone();
+     let arch = get_ua_arch();
+-    let ua = format!("Yaak/{version} ({platform}; {arch})");
++    let ua = format!("Fiak/{version} ({platform}; {arch})");
+     let mut default_headers = HeaderMap::new();
+     default_headers.insert("Accept", HeaderValue::from_str("application/json").unwrap());
+ 
+Index: Fiak/yaak/src-web/commands/openSettings.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/commands/openSettings.tsx
++++ Fiak/yaak/src-web/commands/openSettings.tsx
+@@ -20,7 +20,7 @@ export const openSettings = createFastMu
+     await invokeCmd('cmd_new_child_window', {
+       url: location.href,
+       label: 'settings',
+-      title: 'Yaak Settings',
++      title: 'Fiak Settings',
+       innerSize: [750, 600],
+     });
+   },
+Index: Fiak/yaak/src-web/components/Settings/SettingsGeneral.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/components/Settings/SettingsGeneral.tsx
++++ Fiak/yaak/src-web/components/Settings/SettingsGeneral.tsx
+@@ -68,7 +68,7 @@ export function SettingsGeneral() {
+           className="pl-2 mt-1 ml-[14rem]"
+           checked={settings.autoDownloadUpdates}
+           disabled={!settings.autoupdate}
+-          help="Automatically download Yaak updates (!50MB) in the background, so they will be immediately ready to install."
++          help="Automatically download Fiak updates (!50MB) in the background, so they will be immediately ready to install."
+           title="Automatically download updates"
+           onChange={(autoDownloadUpdates) => patchModel(settings, { autoDownloadUpdates })}
+         />
+Index: Fiak/yaak/src-web/components/Settings/SettingsPlugins.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/components/Settings/SettingsPlugins.tsx
++++ Fiak/yaak/src-web/components/Settings/SettingsPlugins.tsx
+@@ -276,7 +276,7 @@ function InstalledPlugins() {
+   return plugins.length === 0 ? (
+     <div className="pb-4">
+       <EmptyStateText className="text-center">
+-        Plugins extend the functionality of Yaak.
++        Plugins extend the functionality of Fiak.
+         <br />
+         Add your first plugin to get started.
+       </EmptyStateText>
+Index: Fiak/yaak/src-web/components/SettingsDropdown.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/components/SettingsDropdown.tsx
++++ Fiak/yaak/src-web/components/SettingsDropdown.tsx
+@@ -63,7 +63,7 @@ export function SettingsDropdown() {
+           leftSlot: <Icon icon="rocket" />,
+           onSelect: () => openUrl('https://yaak.app/button/new'),
+         },
+-        { type: 'separator', label: `Yaak v${appInfo.version}` },
++        { type: 'separator', label: `Fiak v${appInfo.version}` },
+         {
+           label: 'Purchase License',
+           color: 'success',
+Index: Fiak/yaak/src-web/components/git/GitDropdown.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/components/git/GitDropdown.tsx
++++ Fiak/yaak/src-web/components/git/GitDropdown.tsx
+@@ -400,7 +400,7 @@ function SetupGitDropdown({
+             const confirmed = await showConfirm({
+               id: 'hide-git-init-prompt',
+               title: 'Hide Git Setup',
+-              description: 'You can initialize a git repo outside of Yaak to bring this back',
++              description: 'You can initialize a git repo outside of Fiak to bring this back',
+             });
+             if (confirmed) {
+               await setHidden((prev) => ({ ...prev, [workspaceId]: true }));
+Index: Fiak/yaak/src-web/components/responseViewers/WebPageViewer.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/components/responseViewers/WebPageViewer.tsx
++++ Fiak/yaak/src-web/components/responseViewers/WebPageViewer.tsx
+@@ -21,7 +21,7 @@ export function WebPageViewer({ response
+     <div className="h-full pb-3">
+       <iframe
+         key={body ? 'has-body' : 'no-body'}
+-        title="Yaak response preview"
++        title="Fiak response preview"
+         srcDoc={contentForIframe}
+         sandbox="allow-scripts allow-forms"
+         referrerPolicy="no-referrer"
+Index: Fiak/yaak/src-web/hooks/useSyncWorkspaceRequestTitle.ts
+===================================================================
+--- Fiak.orig/yaak/src-web/hooks/useSyncWorkspaceRequestTitle.ts
++++ Fiak/yaak/src-web/hooks/useSyncWorkspaceRequestTitle.ts
+@@ -16,7 +16,7 @@ export function useSyncWorkspaceRequestT
+ 
+   useEffect(() => {
+     const settings = jotaiStore.get(settingsAtom);
+-    let newTitle = activeWorkspace ? activeWorkspace.name : 'Yaak';
++    let newTitle = activeWorkspace ? activeWorkspace.name : 'Fiak';
+     if (activeEnvironment) {
+       newTitle += ` (${activeEnvironment.name})`;
+     }
+Index: Fiak/yaak/src-web/index.html
+===================================================================
+--- Fiak.orig/yaak/src-web/index.html
++++ Fiak/yaak/src-web/index.html
+@@ -3,7 +3,7 @@
+ <head>
+   <meta charset="UTF-8"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+-  <title>Yaak App</title>
++  <title>Fiak App</title>
+ <!--  <script src="http://localhost:8097"></script>-->
+ 
+   <!-- Certain elements like webview (and maybe <select>?) will use background
+Index: Fiak/yaak/src-web/lib/initGlobalListeners.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/lib/initGlobalListeners.tsx
++++ Fiak/yaak/src-web/lib/initGlobalListeners.tsx
+@@ -53,7 +53,7 @@ export function initGlobalListeners() {
+       timeout: null,
+       message: (
+         <VStack>
+-          <h2 className="font-semibold">Yaak {version} was installed</h2>
++          <h2 className="font-semibold">Fiak {version} was installed</h2>
+           <p className="text-text-subtle text-sm">Start using the new version now?</p>
+         </VStack>
+       ),
+@@ -68,7 +68,7 @@ export function initGlobalListeners() {
+             setTimeout(() => invokeCmd('cmd_restart', {}), 200);
+           }}
+         >
+-          Relaunch Yaak
++          Relaunch Fiak
+         </ButtonInfiniteLoading>
+       ),
+     });
+@@ -90,7 +90,7 @@ export function initGlobalListeners() {
+         timeout: null,
+         message: (
+           <VStack>
+-            <h2 className="font-semibold">Yaak {version} is available</h2>
++            <h2 className="font-semibold">Fiak {version} is available</h2>
+             <p className="text-text-subtle text-sm">
+               {downloaded ? 'Do you want to install' : 'Download and install'} the update?
+             </p>

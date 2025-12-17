@@ -1,1 +1,4 @@
-tauri-config
+telemetry.patch
+config.patch
+branding.patch
+referrer.patch

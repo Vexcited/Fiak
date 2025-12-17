@@ -1,0 +1,19 @@
+Index: Fiak/yaak/src-web/components/Settings/SettingsGeneral.tsx
+===================================================================
+--- Fiak.orig/yaak/src-web/components/Settings/SettingsGeneral.tsx
++++ Fiak/yaak/src-web/components/Settings/SettingsGeneral.tsx
+@@ -80,14 +80,6 @@ export function SettingsGeneral() {
+           help="Periodically ping Yaak servers to check for relevant notifications."
+           onChange={(checkNotifications) => patchModel(settings, { checkNotifications })}
+         />
+-        <Checkbox
+-          disabled
+-          className="pl-2 mt-1 ml-[14rem]"
+-          checked={false}
+-          title="Send anonymous usage statistics"
+-          help="Yaak is local-first and does not collect analytics or usage data 🔐"
+-          onChange={(checkNotifications) => patchModel(settings, { checkNotifications })}
+-        />
+       </CargoFeature>
+ 
+       <Separator className="my-4" />

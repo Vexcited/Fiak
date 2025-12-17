@@ -21,8 +21,15 @@ want to build Fiak locally.
 # remove all patches
 quilt pop -a
 
-# update upstream
-git submodule update --remote yaak
+# update upstream to a given version
+cd yaak
+git fetch --tags
+git checkout v2025.9.3 # for example
+cd ..
+
+# commit the new pointer
+git add yaak
+git commit -m 'chore(yaak): upgrade to v2025.9.3'
 
 # apply all patches
 quilt push -a

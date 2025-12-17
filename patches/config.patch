@@ -20,11 +20,20 @@ Index: Fiak/yaak/src-tauri/tauri.development.conf.json
    "identifier": "app.yaak.desktop.dev",
    "bundle": {
      "externalBin": [
+Index: Fiak/yaak/src-tauri/tauri.linux.conf.json
+===================================================================
+--- Fiak.orig/yaak/src-tauri/tauri.linux.conf.json
++++ Fiak/yaak/src-tauri/tauri.linux.conf.json
+@@ -1,3 +1,3 @@
+ {
+-  "productName": "yaak"
++  "productName": "fiak"
+ }
 Index: Fiak/yaak/src-tauri/tauri.release.conf.json
 ===================================================================
 --- Fiak.orig/yaak/src-tauri/tauri.release.conf.json
 +++ Fiak/yaak/src-tauri/tauri.release.conf.json
-@@ -1,26 +1,9 @@
+@@ -1,39 +1,22 @@
  {
    "build": {
      "features": [
@@ -52,7 +61,11 @@ Index: Fiak/yaak/src-tauri/tauri.release.conf.json
    "plugins": {
      "updater": {
        "endpoints": [
-@@ -30,10 +13,10 @@
+-        "https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"
++        "https://github.com/Vexcited/Fiak/releases/latest/download/latest.json"
+       ],
+-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVGRkFGMjQxRUNEOTQ3MzAKUldRd1I5bnNRZkw2NzRtMnRlWTN3R24xYUR3aGRsUjJzWGwvdHdEcGljb3ZJMUNlMjFsaHlqVU4K"
++      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU0Q0RCNjZEQzJENDBCQUQKUldTdEM5VENiYmJONUh0ZTA2Z1lBQzlONzB5ek9wRU43TFdsSUk3WnovR2dPeTE3RGM0ZTZIbzQK"
      }
    },
    "bundle": {
@@ -66,12 +79,13 @@ Index: Fiak/yaak/src-tauri/tauri.release.conf.json
      "active": true,
      "category": "DeveloperTool",
      "createUpdaterArtifacts": true,
-@@ -64,7 +47,7 @@
+@@ -63,9 +46,6 @@
+       "entitlements": "macos/entitlements.plist",
        "frameworks": []
      },
-     "windows": {
+-    "windows": {
 -      "signCommand": "trusted-signing-cli -e https://eus.codesigning.azure.net/ -a Yaak -c yaakapp %1"
-+      "signCommand": "trusted-signing-cli -e https://eus.codesigning.azure.net/ -a Fiak -c yaakapp %1"
-     },
+-    },
      "linux": {
        "deb": {
+         "desktopTemplate": "./template.desktop"

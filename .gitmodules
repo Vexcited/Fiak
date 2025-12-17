@@ -1,0 +1,3 @@
+[submodule "yaak"]
+	path = yaak
+	url = https://github.com/mountain-loop/yaak

@@ -1,0 +1,3 @@
+QUILT_PATCHES=patches
+QUILT_DIFF_ARGS="--no-index --no-timestamps"
+QUILT_REFRESH_ARGS="--no-index --no-timestamps"

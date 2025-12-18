@@ -114,4 +114,4 @@ jobs:
           includeUpdaterJson: true
           releaseDraft: false
           prerelease: true
-          args: '${{ matrix.args }} --config ./yaak/src-tauri/tauri.release.conf.json'
+          args: '${{ matrix.args }} --config src-tauri/tauri.release.conf.json'

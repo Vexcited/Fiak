@@ -66,10 +66,17 @@ jobs:
           cache-on-failure: true
 
       - name: install dependencies
+        if: matrix.os == 'macos'
+        run: |
+          brew install quilt
+
+      - name: install dependencies
         if: matrix.os == 'ubuntu'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils quilt
+
+      - run: quilt push -a
 
       - name: protoc for plugin-runtime
         uses: arduino/setup-protoc@v3

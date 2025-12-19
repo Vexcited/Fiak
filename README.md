@@ -14,13 +14,14 @@ I also used this project as an excuse to learn how patchsets work and how to mai
 
 And finally, as a French person, naming a Yaak alternative Fiak was too perfect to pass up.
 
-## Included
+## What's new ?
 
+- Based on nightly releases instead of stable, moreover you can't change this in settings
 - Remove that one useless mention about telemetry
 - Rebranding to `Fiak` instead of `Yaak`
 - Build without the `license` feature
 
-## Versions
+## Versioning
 
 Fiak is updated whenever Yaak creates a new release.
 This a manually done process. Please open an issue if I'm too slow to update Fiak.

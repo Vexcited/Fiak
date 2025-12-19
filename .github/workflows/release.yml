@@ -3,9 +3,12 @@ name: Generate Artifacts
 on:
   workflow_dispatch:
     inputs:
-      version:
+      yaak_version:
         type: string
-        description: Version nane to generate artifacts for, might include the `v` prefix.
+        description: Version used to build Fiak
+      fiak_version:
+        type: string
+        description: Version of Fiak
 
 jobs:
   build-artifacts:
@@ -17,26 +20,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - platform: 'macos-latest'
-          #   args: '--target aarch64-apple-darwin'
-          #   yaak_arch: 'arm64'
-          #   os: 'macos'
-          #   targets: 'aarch64-apple-darwin'
-          # - platform: 'macos-latest' # for Intel-based Macs.
-          #   args: '--target x86_64-apple-darwin'
-          #   yaak_arch: 'x64'
-          #   os: 'macos'
-          #   targets: 'x86_64-apple-darwin'
-          # - platform: 'ubuntu-22.04'
-          #   args: ''
-          #   yaak_arch: 'x64'
-          #   os: 'ubuntu'
-          #   targets: ''
-          # - platform: 'ubuntu-22.04-arm'
-          #   args: ''
-          #   yaak_arch: 'arm64'
-          #   os: 'ubuntu'
-          #   targets: ''
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+            yaak_arch: 'arm64'
+            os: 'macos'
+            targets: 'aarch64-apple-darwin'
+          - platform: 'macos-latest'
+            args: '--target x86_64-apple-darwin'
+            yaak_arch: 'x64'
+            os: 'macos'
+            targets: 'x86_64-apple-darwin'
+          - platform: 'ubuntu-22.04'
+            args: ''
+            yaak_arch: 'x64'
+            os: 'ubuntu'
+            targets: ''
+          - platform: 'ubuntu-22.04-arm'
+            args: ''
+            yaak_arch: 'arm64'
+            os: 'ubuntu'
+            targets: ''
           - platform: 'windows-latest'
             args: ''
             yaak_arch: 'x64'
@@ -101,8 +104,7 @@ jobs:
       - run: npm run replace-version
         working-directory: ./yaak
         env:
-          # YAAK_VERSION: ${{ github.ref_name }}
-          YAAK_VERSION: v2025.9.3
+          YAAK_VERSION: v${{ inputs.fiak_version }}
 
       - uses: tauri-apps/tauri-action@v0
         env:
@@ -120,17 +122,12 @@ jobs:
           APPLE_PASSWORD: ${{ matrix.os == 'macos' && secrets.APPLE_PASSWORD }}
           APPLE_SIGNING_IDENTITY: ${{ matrix.os == 'macos' && secrets.APPLE_SIGNING_IDENTITY }}
           APPLE_TEAM_ID: ${{ matrix.os == 'macos' && secrets.APPLE_TEAM_ID }}
-
-          # Windows
-          # AZURE_CLIENT_ID: ${{ matrix.os == 'windows' && secrets.AZURE_CLIENT_ID }}
-          # AZURE_CLIENT_SECRET: ${{ matrix.os == 'windows' && secrets.AZURE_CLIENT_SECRET }}
-          # AZURE_TENANT_ID: ${{ matrix.os == 'windows' && secrets.AZURE_TENANT_ID }}
         with:
           projectPath: ./yaak
           tagName: 'v__VERSION__'
           releaseName: 'Release __VERSION__'
-          releaseBody: '[Changelog __VERSION__](https://yaak.app/blog/__VERSION__)'
+          releaseBody: '> Based on [Yaak v${{ inputs.yaak_version }}](https://github.com/mountain-loop/yaak/tree/v${{ inputs.yaak_version }}). For details on upstream changes, see <https://yaak.app/blog/${{ inputs.yaak_version }}>. The changelog for this Fiak release is provided below.\n\n(TBD)'
           includeUpdaterJson: true
           releaseDraft: true
-          prerelease: true
+          prerelease: false
           args: '${{ matrix.args }} --config src-tauri/tauri.release.conf.json'

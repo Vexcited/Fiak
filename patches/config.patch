@@ -1,39 +1,6 @@
-Index: Fiak/yaak/src-tauri/tauri.conf.json
-===================================================================
---- Fiak.orig/yaak/src-tauri/tauri.conf.json
-+++ Fiak/yaak/src-tauri/tauri.conf.json
-@@ -1,5 +1,5 @@
- {
--  "productName": "Yaak",
-+  "productName": "Fiak",
-   "version": "0.0.0",
-   "identifier": "app.yaak.desktop",
-   "build": {
-Index: Fiak/yaak/src-tauri/tauri.development.conf.json
-===================================================================
---- Fiak.orig/yaak/src-tauri/tauri.development.conf.json
-+++ Fiak/yaak/src-tauri/tauri.development.conf.json
-@@ -1,5 +1,5 @@
- {
--  "productName": "Daak",
-+  "productName": "Faak",
-   "identifier": "app.yaak.desktop.dev",
-   "bundle": {
-     "externalBin": [
-Index: Fiak/yaak/src-tauri/tauri.linux.conf.json
-===================================================================
---- Fiak.orig/yaak/src-tauri/tauri.linux.conf.json
-+++ Fiak/yaak/src-tauri/tauri.linux.conf.json
-@@ -1,3 +1,3 @@
- {
--  "productName": "yaak"
-+  "productName": "fiak"
- }
-Index: Fiak/yaak/src-tauri/tauri.release.conf.json
-===================================================================
---- Fiak.orig/yaak/src-tauri/tauri.release.conf.json
-+++ Fiak/yaak/src-tauri/tauri.release.conf.json
-@@ -1,39 +1,22 @@
+--- a/yaak/src-tauri/tauri.release.conf.json
++++ b/yaak/src-tauri/tauri.release.conf.json
+@@ -1,32 +1,15 @@
  {
    "build": {
      "features": [
@@ -69,16 +36,6 @@ Index: Fiak/yaak/src-tauri/tauri.release.conf.json
      }
    },
    "bundle": {
--    "publisher": "Yaak",
-+    "publisher": "Fiak",
-     "license": "MIT",
--    "copyright": "Yaak",
--    "homepage": "https://yaak.app",
-+    "copyright": "Fiak",
-+    "homepage": "https://github.com/Vexcited/Fiak",
-     "active": true,
-     "category": "DeveloperTool",
-     "createUpdaterArtifacts": true,
 @@ -63,9 +46,6 @@
        "entitlements": "macos/entitlements.plist",
        "frameworks": []

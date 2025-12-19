@@ -86,8 +86,9 @@ jobs:
         run: quilt push -a
 
       - if: matrix.os == 'windows'
-        run: quilt push -a
-        shell: C:\msys64\usr\bin\bash -l {0}
+        run: |
+          C:\msys64\usr\bin\bash -lc "cd \"$(cygpath -u $PWD)\" && quilt push -a"
+        shell: pwsh
 
       - name: protoc for plugin-runtime
         uses: arduino/setup-protoc@v3

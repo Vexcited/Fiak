@@ -87,7 +87,7 @@ jobs:
 
       - if: matrix.os == 'windows'
         run: |
-          C:\msys64\usr\bin\bash.exe -lc 'cd "$(cygpath -u "$PWD")" && quilt push -a'
+          C:\msys64\usr\bin\bash.exe -lc 'cd "$(cygpath -u "$GITHUB_WORKSPACE")" && quilt push -a'
         shell: pwsh
 
       - name: protoc for plugin-runtime

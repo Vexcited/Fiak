@@ -172,3 +172,14 @@
      "active": true,
      "category": "DeveloperTool",
      "createUpdaterArtifacts": true,
+--- a/yaak/src-tauri/yaak-models/src/queries/workspaces.rs
++++ b/yaak/src-tauri/yaak-models/src/queries/workspaces.rs
+@@ -19,7 +19,7 @@
+         if workspaces.is_empty() {
+             workspaces.push(self.upsert_workspace(
+                 &Workspace {
+-                    name: "Yaak".to_string(),
++                    name: "Fiak".to_string(),
+                     setting_follow_redirects: true,
+                     setting_validate_certificates: true,
+                     ..Default::default()

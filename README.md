@@ -21,13 +21,23 @@ And finally, as a French person, naming a Yaak alternative Fiak was too perfect 
 - Rebranding to `Fiak` instead of `Yaak`
 - Build without the `license` feature
 
+## Download
+
+You can find nightly builds in the [releases tab](https://github.com/Vexcited/Fiak/releases/latest) of the repository.
+
+Fiak includes an auto-updater that is linked to this repository.
+
 ## Versioning
 
-Fiak is updated whenever Yaak creates a new release.
-This a manually done process. Please open an issue if I'm too slow to update Fiak.
+Fiak does not have `stable` or `beta` channels,
+it only has the `nightly` one which is the latest release from this repository.
+
+Fiak is updated whenever Yaak creates a new tag.
+This a manually done process to make sure every patches are working.
 
 Fiak adds a suffix to the version which is the release identifier.
-I have to do this to stay within SemVer and also have a way to easily know from which Yaak version we're coming from.
+I have to do this to stay within SemVer and also have a way to easily
+know from which Yaak version we're patching from.
 
 > For example, `v2025.9.3` will have its first Fiak version as `v2025.9.3-fiak0`. Whenever Fiak applies a new patch and release, it'll become `v2025.9.3-fiak1`.
 

@@ -1,0 +1,76 @@
+--- a/yaak/src-web/components/SettingsDropdown.tsx
++++ b/yaak/src-web/components/SettingsDropdown.tsx
+@@ -61,7 +61,20 @@
+           leftSlot: <Icon icon="rocket" />,
+           onSelect: () => openUrl('https://yaak.app/button/new'),
+         },
+-        { type: 'separator', label: `Yaak v${appInfo.version}` },
++        { type: 'separator', label: `Yaak v${appInfo.yaakVersion}` },
++        {
++          label: 'Feedback',
++          leftSlot: <Icon icon="chat" />,
++          rightSlot: <Icon icon="external_link" color="secondary" />,
++          onSelect: () => openUrl('https://yaak.app/feedback'),
++        },
++        {
++          label: 'Changelog',
++          leftSlot: <Icon icon="cake" />,
++          rightSlot: <Icon icon="external_link" color="secondary" />,
++          onSelect: () => openUrl(`https://yaak.app/changelog/${appInfo.yaakVersion}`),
++        },
++        { type: 'separator', label: `Fiak v${appInfo.version}` },
+         {
+           label: 'Check for Updates',
+           leftSlot: <Icon icon="update" />,
+@@ -69,16 +82,16 @@
+           onSelect: () => checkForUpdates.mutate(),
+         },
+         {
+-          label: 'Feedback',
++          label: 'Issues',
+           leftSlot: <Icon icon="chat" />,
+           rightSlot: <Icon icon="external_link" color="secondary" />,
+-          onSelect: () => openUrl('https://yaak.app/feedback'),
++          onSelect: () => openUrl('https://github.com/Vexcited/Fiak/issues'),
+         },
+         {
+           label: 'Changelog',
+           leftSlot: <Icon icon="cake" />,
+           rightSlot: <Icon icon="external_link" color="secondary" />,
+-          onSelect: () => openUrl(`https://yaak.app/changelog/${appInfo.version}`),
++          onSelect: () => openUrl(`https://github.com/Vexcited/Fiak/releases/tag/v${appInfo.version}`),
+         },
+       ]}
+     >
+--- a/yaak/src-web/lib/appInfo.ts
++++ b/yaak/src-web/lib/appInfo.ts
+@@ -4,6 +4,7 @@
+ export interface AppInfo {
+   isDev: boolean;
+   version: string;
++  yaakVersion: string;
+   name: string;
+   appDataDir: string;
+   appLogDir: string;
+@@ -14,6 +15,10 @@
+ export const appInfo = {
+   ...(await invokeCmd('cmd_metadata')),
+   identifier: await getIdentifier(),
++  get yaakVersion(): string {
++    //  <yaak_version>[-fiak<fiak_version>]
++    return this.version.split("-")[0]!;
++  }
+ } as AppInfo;
+ 
+ console.log('App info', appInfo);
+--- a/yaak/src-web/lib/initGlobalListeners.tsx
++++ b/yaak/src-web/lib/initGlobalListeners.tsx
+@@ -115,7 +115,7 @@
+               variant="border"
+               rightSlot={<Icon icon="external_link" />}
+               onClick={async () => {
+-                await openUrl(`https://yaak.app/changelog/${version}`);
++                await openUrl(`https://github.com/Vexcited/Fiak/releases/tag/v${version}`);
+               }}
+             >
+               What&apos;s New

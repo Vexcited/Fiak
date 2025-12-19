@@ -26,9 +26,10 @@ And finally, as a French person, naming a Yaak alternative Fiak was too perfect 
 Fiak is updated whenever Yaak creates a new release.
 This a manually done process. Please open an issue if I'm too slow to update Fiak.
 
-Fiak adds an additional number to the version which is the release count for this specific Yaak version.
+Fiak adds a suffix to the version which is the release identifier.
+I have to do this to stay within SemVer and also have a way to easily know from which Yaak version we're coming from.
 
-> For example, `v2025.9.3` will have its first Fiak version as `v2025.9.3.0`. If Fiak applies a new patch and release, it'll be `v2025.9.3.1`.
+> For example, `v2025.9.3` will have its first Fiak version as `v2025.9.3-fiak0`. Whenever Fiak applies a new patch and release, it'll become `v2025.9.3-fiak1`.
 
 ## What did not change internally ?
 

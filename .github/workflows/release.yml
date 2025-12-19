@@ -1,10 +1,11 @@
 name: Generate Artifacts
 
 on:
-  push:
-    branches:
-      - main
-    # tags: [ v* ]
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: Version nane to generate artifacts for, might include the `v` prefix.
 
 jobs:
   build-artifacts:
@@ -16,11 +17,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-latest' # for Arm-based Macs (M1 and above).
-            args: '--target aarch64-apple-darwin'
-            yaak_arch: 'arm64'
-            os: 'macos'
-            targets: 'aarch64-apple-darwin'
+          # - platform: 'macos-latest'
+          #   args: '--target aarch64-apple-darwin'
+          #   yaak_arch: 'arm64'
+          #   os: 'macos'
+          #   targets: 'aarch64-apple-darwin'
           # - platform: 'macos-latest' # for Intel-based Macs.
           #   args: '--target x86_64-apple-darwin'
           #   yaak_arch: 'x64'
@@ -36,17 +37,16 @@ jobs:
           #   yaak_arch: 'arm64'
           #   os: 'ubuntu'
           #   targets: ''
-          # - platform: 'windows-latest'
-          #   args: ''
-          #   yaak_arch: 'x64'
-          #   os: 'windows'
-          #   targets: ''
-          # # Windows ARM64
-          # - platform: 'windows-latest'
-          #   args: '--target aarch64-pc-windows-msvc'
-          #   yaak_arch: 'arm64'
-          #   os: 'windows'
-          #   targets: 'aarch64-pc-windows-msvc'
+          - platform: 'windows-latest'
+            args: ''
+            yaak_arch: 'x64'
+            os: 'windows'
+            targets: ''
+          - platform: 'windows-latest'
+            args: '--target aarch64-pc-windows-msvc'
+            yaak_arch: 'arm64'
+            os: 'windows'
+            targets: 'aarch64-pc-windows-msvc'
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
@@ -76,7 +76,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils quilt
 
-      - run: quilt push -a
+      - name: install dependencies
+        if: matrix.os == 'windows'
+        run: |
+          C:\msys64\usr\bin\bash -lc "pacman -S --noconfirm quilt"
+        shell: pwsh
+
+      - if: matrix.os == 'windows'
+        run: quilt push -a
+
+      - if: matrix.os != 'windows'
+        run: |
+          C:\msys64\usr\bin\bash -lc "cd '$(cygpath -u '$PWD')' && quilt push -a"
+        shell: pwsh
 
       - name: protoc for plugin-runtime
         uses: arduino/setup-protoc@v3

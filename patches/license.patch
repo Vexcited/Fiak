@@ -1,42 +1,71 @@
 --- a/yaak/src-web/components/Settings/Settings.tsx
 +++ b/yaak/src-web/components/Settings/Settings.tsx
-@@ -4,7 +4,6 @@
+@@ -1,13 +1,11 @@
+ import { useSearch } from '@tanstack/react-router';
+ import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
+ import { type } from '@tauri-apps/plugin-os';
+-import { useLicense } from '@yaakapp-internal/license';
+ import { pluginsAtom, settingsAtom } from '@yaakapp-internal/models';
  import classNames from 'classnames';
+ import { useAtomValue } from 'jotai';
  import { useState } from 'react';
  import { useKeyPressEvent } from 'react-use';
 -import { appInfo } from '../../lib/appInfo';
  import { capitalize } from '../../lib/capitalize';
+ import { CountBadge } from '../core/CountBadge';
  import { HStack } from '../core/Stacks';
- import type { TabItem } from '../core/Tabs/Tabs';
-@@ -12,7 +11,6 @@
- import { HeaderSize } from '../HeaderSize';
+@@ -16,7 +14,6 @@
+ import { SettingsCertificates } from './SettingsCertificates';
  import { SettingsGeneral } from './SettingsGeneral';
  import { SettingsInterface } from './SettingsInterface';
 -import { SettingsLicense } from './SettingsLicense';
  import { SettingsPlugins } from './SettingsPlugins';
  import { SettingsProxy } from './SettingsProxy';
  import { SettingsTheme } from './SettingsTheme';
-@@ -26,8 +24,7 @@
- const TAB_THEME = 'theme';
+@@ -31,7 +28,6 @@
  const TAB_PROXY = 'proxy';
+ const TAB_CERTIFICATES = 'certificates';
  const TAB_PLUGINS = 'plugins';
 -const TAB_LICENSE = 'license';
--const tabs = [TAB_GENERAL, TAB_THEME, TAB_INTERFACE, TAB_PROXY, TAB_PLUGINS, TAB_LICENSE] as const;
-+const tabs = [TAB_GENERAL, TAB_THEME, TAB_INTERFACE, TAB_PROXY, TAB_PLUGINS] as const;
+ const tabs = [
+   TAB_GENERAL,
+   TAB_THEME,
+@@ -39,7 +35,6 @@
+   TAB_CERTIFICATES,
+   TAB_PROXY,
+   TAB_PLUGINS,
+-  TAB_LICENSE,
+ ] as const;
  export type SettingsTab = (typeof tabs)[number];
  
- export default function Settings({ hide }: Props) {
-@@ -78,7 +75,6 @@
+@@ -48,7 +43,6 @@
+   const [tab, setTab] = useState<string | undefined>(tabFromQuery);
+   const settings = useAtomValue(settingsAtom);
+   const plugins = useAtomValue(pluginsAtom);
+-  const licenseCheck = useLicense();
+ 
+   // Close settings window on escape
+   // TODO: Could this be put in a better place? Eg. in Rust key listener when creating the window
+@@ -94,7 +88,6 @@
            (value): TabItem => ({
              value,
              label: capitalize(value),
 -            hidden: !appInfo.featureLicense && value === TAB_LICENSE,
+             rightSlot:
+               value === TAB_CERTIFICATES ? (
+                 <CountBadge count={settings.clientCertificates.length} />
+@@ -102,8 +95,6 @@
+                 <CountBadge count={plugins.length} />
+               ) : value === TAB_PROXY && settings.proxy?.type === 'enabled' ? (
+                 <CountBadge count />
+-              ) : value === TAB_LICENSE && licenseCheck.check.data?.status === 'personal_use' ? (
+-                <CountBadge count color="notice" />
+               ) : null,
            }),
          )}
-       >
-@@ -97,9 +93,6 @@
-         <TabContent value={TAB_PROXY} className="overflow-y-auto h-full px-6 !py-4">
-           <SettingsProxy />
+@@ -126,9 +117,6 @@
+         <TabContent value={TAB_CERTIFICATES} className="overflow-y-auto h-full px-6 !py-4">
+           <SettingsCertificates />
          </TabContent>
 -        <TabContent value={TAB_LICENSE} className="overflow-y-auto h-full px-6 !py-4">
 -          <SettingsLicense />
@@ -53,7 +82,7 @@
  import type { EditorKeymap, Settings } from '@yaakapp-internal/models';
  import { patchModel, settingsAtom } from '@yaakapp-internal/models';
  import { useAtomValue } from 'jotai';
-@@ -8,13 +7,10 @@
+@@ -8,14 +7,11 @@
  
  import { activeWorkspaceAtom } from '../../hooks/useActiveWorkspace';
  import { clamp } from '../../lib/clamp';
@@ -62,12 +91,13 @@
 -import { CargoFeature } from '../CargoFeature';
  import { Button } from '../core/Button';
  import { Checkbox } from '../core/Checkbox';
+ import { Heading } from '../core/Heading';
  import { Icon } from '../core/Icon';
 -import { Link } from '../core/Link';
  import { Select } from '../core/Select';
  import { HStack, VStack } from '../core/Stacks';
  
-@@ -153,9 +149,6 @@
+@@ -158,9 +154,6 @@
          title="Colorize request methods"
          onChange={(coloredMethods) => patchModel(settings, { coloredMethods })}
        />
@@ -77,7 +107,7 @@
  
        <NativeTitlebarSetting settings={settings} />
  
-@@ -196,45 +189,3 @@
+@@ -201,45 +194,3 @@
      </div>
    );
  }
@@ -539,7 +569,7 @@
      "yaak-mac-window",
      "yaak-models",
      "yaak-plugins",
-@@ -36,7 +35,6 @@
+@@ -37,7 +36,6 @@
  cargo-clippy = []
  default = []
  updater = []
@@ -547,7 +577,7 @@
  
  [build-dependencies]
  tauri-build = { version = "2.5.3", features = [] }
-@@ -81,7 +79,6 @@
+@@ -82,7 +80,6 @@
  yaak-git = { path = "yaak-git" }
  yaak-grpc = { path = "yaak-grpc" }
  yaak-http = { workspace = true }
@@ -1031,7 +1061,7 @@
  
 --- a/yaak/src-tauri/src/lib.rs
 +++ b/yaak/src-tauri/src/lib.rs
-@@ -78,7 +78,6 @@
+@@ -79,7 +79,6 @@
      app_data_dir: String,
      app_log_dir: String,
      feature_updater: bool,
@@ -1039,7 +1069,7 @@
  }
  
  #[tauri::command]
-@@ -91,7 +90,6 @@
+@@ -92,7 +91,6 @@
          name: app_handle.package_info().name.to_string(),
          app_data_dir: app_data_dir.to_string_lossy().to_string(),
          app_log_dir: app_log_dir.to_string_lossy().to_string(),
@@ -1047,7 +1077,7 @@
          feature_updater: cfg!(feature = "updater"),
      })
  }
-@@ -1346,11 +1344,6 @@
+@@ -1398,11 +1396,6 @@
          .plugin(yaak_ws::init())
          .plugin(yaak_sync::init());
  
@@ -1098,12 +1128,12 @@
              ]);
 --- a/yaak/src-tauri/yaak-models/bindings/gen_models.ts
 +++ b/yaak/src-tauri/yaak-models/bindings/gen_models.ts
-@@ -62,7 +62,7 @@
+@@ -64,7 +64,7 @@
  
  export type ProxySettingAuth = { user: string, password: string, };
  
--export type Settings = { model: "settings", id: string, createdAt: string, updatedAt: string, appearance: string, coloredMethods: boolean, editorFont: string | null, editorFontSize: number, editorKeymap: EditorKeymap, editorSoftWrap: boolean, hideWindowControls: boolean, useNativeTitlebar: boolean, interfaceFont: string | null, interfaceFontSize: number, interfaceScale: number, openWorkspaceNewWindow: boolean | null, proxy: ProxySetting | null, themeDark: string, themeLight: string, updateChannel: string, hideLicenseBadge: boolean, autoupdate: boolean, autoDownloadUpdates: boolean, checkNotifications: boolean, };
-+export type Settings = { model: "settings", id: string, createdAt: string, updatedAt: string, appearance: string, coloredMethods: boolean, editorFont: string | null, editorFontSize: number, editorKeymap: EditorKeymap, editorSoftWrap: boolean, hideWindowControls: boolean, useNativeTitlebar: boolean, interfaceFont: string | null, interfaceFontSize: number, interfaceScale: number, openWorkspaceNewWindow: boolean | null, proxy: ProxySetting | null, themeDark: string, themeLight: string, updateChannel: string, autoupdate: boolean, autoDownloadUpdates: boolean, checkNotifications: boolean, };
+-export type Settings = { model: "settings", id: string, createdAt: string, updatedAt: string, appearance: string, clientCertificates: Array<ClientCertificate>, coloredMethods: boolean, editorFont: string | null, editorFontSize: number, editorKeymap: EditorKeymap, editorSoftWrap: boolean, hideWindowControls: boolean, useNativeTitlebar: boolean, interfaceFont: string | null, interfaceFontSize: number, interfaceScale: number, openWorkspaceNewWindow: boolean | null, proxy: ProxySetting | null, themeDark: string, themeLight: string, updateChannel: string, hideLicenseBadge: boolean, autoupdate: boolean, autoDownloadUpdates: boolean, checkNotifications: boolean, };
++export type Settings = { model: "settings", id: string, createdAt: string, updatedAt: string, appearance: string, clientCertificates: Array<ClientCertificate>, coloredMethods: boolean, editorFont: string | null, editorFontSize: number, editorKeymap: EditorKeymap, editorSoftWrap: boolean, hideWindowControls: boolean, useNativeTitlebar: boolean, interfaceFont: string | null, interfaceFontSize: number, interfaceScale: number, openWorkspaceNewWindow: boolean | null, proxy: ProxySetting | null, themeDark: string, themeLight: string, updateChannel: string, autoupdate: boolean, autoDownloadUpdates: boolean, checkNotifications: boolean, };
  
  export type SyncState = { model: "sync_state", id: string, workspaceId: string, createdAt: string, updatedAt: string, flushedAt: string, modelId: string, checksum: string, relPath: string, syncDir: string, };
  
@@ -1122,7 +1152,7 @@
 -                 AND JSON_EXTRACT(kv.value, '$.confirmedPersonalUse') = TRUE );
 --- a/yaak/src-tauri/yaak-models/src/models.rs
 +++ b/yaak/src-tauri/yaak-models/src/models.rs
-@@ -122,7 +122,6 @@
+@@ -143,7 +143,6 @@
      pub theme_dark: String,
      pub theme_light: String,
      pub update_channel: String,
@@ -1130,7 +1160,7 @@
      pub autoupdate: bool,
      pub auto_download_updates: bool,
      pub check_notifications: bool,
-@@ -175,7 +174,6 @@
+@@ -198,7 +197,6 @@
              (ThemeDark, self.theme_dark.as_str().into()),
              (ThemeLight, self.theme_light.as_str().into()),
              (UpdateChannel, self.update_channel.into()),
@@ -1138,7 +1168,7 @@
              (Autoupdate, self.autoupdate.into()),
              (AutoDownloadUpdates, self.auto_download_updates.into()),
              (ColoredMethods, self.colored_methods.into()),
-@@ -202,7 +200,6 @@
+@@ -226,7 +224,6 @@
              SettingsIden::ThemeDark,
              SettingsIden::ThemeLight,
              SettingsIden::UpdateChannel,
@@ -1146,7 +1176,7 @@
              SettingsIden::Autoupdate,
              SettingsIden::AutoDownloadUpdates,
              SettingsIden::ColoredMethods,
-@@ -238,7 +235,6 @@
+@@ -264,7 +261,6 @@
              update_channel: row.get("update_channel")?,
              autoupdate: row.get("autoupdate")?,
              auto_download_updates: row.get("auto_download_updates")?,
@@ -1156,7 +1186,7 @@
          })
 --- a/yaak/src-tauri/yaak-models/src/queries/settings.rs
 +++ b/yaak/src-tauri/yaak-models/src/queries/settings.rs
-@@ -34,7 +34,6 @@
+@@ -35,7 +35,6 @@
              update_channel: "nightly".to_string(),
              autoupdate: true,
              colored_methods: false,

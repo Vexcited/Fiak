@@ -1,7 +1,5 @@
-Index: Fiak/yaak/src-web/components/core/Link.tsx
-===================================================================
---- Fiak.orig/yaak/src-web/components/core/Link.tsx
-+++ Fiak/yaak/src-web/components/core/Link.tsx
+--- a/yaak/src-web/components/core/Link.tsx
++++ b/yaak/src-web/components/core/Link.tsx
 @@ -1,7 +1,6 @@
  import { Link as RouterLink } from '@tanstack/react-router';
  import classNames from 'classnames';
@@ -10,7 +8,7 @@ Index: Fiak/yaak/src-web/components/core/Link.tsx
  import { Icon } from './Icon';
  
  interface Props extends HTMLAttributes<HTMLAnchorElement> {
-@@ -20,19 +19,12 @@ export function Link({ href, children, n
+@@ -20,19 +19,12 @@
    );
  
    if (isExternal) {

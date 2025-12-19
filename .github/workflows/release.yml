@@ -126,7 +126,7 @@ jobs:
           projectPath: ./yaak
           tagName: 'v__VERSION__'
           releaseName: 'Release __VERSION__'
-          releaseBody: '> Based on [Yaak v${{ inputs.yaak_version }}](https://github.com/mountain-loop/yaak/tree/v${{ inputs.yaak_version }}). For details on upstream changes, see <https://yaak.app/blog/${{ inputs.yaak_version }}>. The changelog for this Fiak release is provided below.\n\n(TBD)'
+          releaseBody: '> Based on [Yaak v${{ inputs.yaak_version }}](https://github.com/mountain-loop/yaak/tree/v${{ inputs.yaak_version }}). For details on upstream changes, see <https://yaak.app/blog/${{ inputs.yaak_version }}>. The changelog for this Fiak release is provided below.'
           includeUpdaterJson: true
           releaseDraft: true
           prerelease: false

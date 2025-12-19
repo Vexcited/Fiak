@@ -82,13 +82,12 @@ jobs:
           C:\msys64\usr\bin\bash -lc "pacman -S --noconfirm quilt"
         shell: pwsh
 
-      - if: matrix.os == 'windows'
+      - if: matrix.os != 'windows'
         run: quilt push -a
 
-      - if: matrix.os != 'windows'
-        run: |
-          C:\msys64\usr\bin\bash -lc "cd '$(cygpath -u '$PWD')' && quilt push -a"
-        shell: pwsh
+      - if: matrix.os == 'windows'
+        run: quilt push -a
+        shell: C:\msys64\usr\bin\bash -l {0}
 
       - name: protoc for plugin-runtime
         uses: arduino/setup-protoc@v3

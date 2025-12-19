@@ -19,7 +19,7 @@ want to build Fiak locally.
 
 ```sh
 # remove all patches
-quilt pop -a
+quilt pop -af
 
 # update upstream to a given version
 cd yaak
@@ -32,7 +32,7 @@ git add yaak
 git commit -m 'chore(yaak): upgrade to v2025.9.3'
 
 # apply all patches
-quilt push -a
+quilt push -af
 ```
 
 Pray there's no conflict, if that's the case,

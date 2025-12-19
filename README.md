@@ -1,17 +1,18 @@
 # Fiak
 
-A release build of [Yaak](https://github.com/mountain-loop/yaak) without the `license` code.
+A release build of [Yaak](https://github.com/mountain-loop/yaak) without the `license` code - and a few more things.
 
-## Motivation
+## Why ?
 
-Yes, I know Yaak is forever free and will never force you to pay a license in any way.
+I know Yaak is free and always will be, there’s no requirement to buy a license.
 
-However I don't like seeing `Commercial Trial` or a `Purchase License` button in menus.
-Most people will go along and not care that much but that kinda ruins the beauty of the product to me.
+That said, I’m not a fan of seeing things like `Commercial Trial` or `Purchase License` in the UI. Most people probably don’t care, but for me it slightly takes away from how nice the app feels.
 
-Thankfully, all the licensing code is behind a `license` feature (enabled by default in release configuration) so if we don't want all of this, we can just build a release without that feature.
+Luckily, all the licensing stuff is behind a `license` feature flag, enabled by default in release builds. If you build without it, all of that simply disappears.
 
-I also wanted to learn how managing a patchset is done at the same time.
+I also used this project as an excuse to learn how patchsets work and how to maintain one properly.
+
+And finally, as a French person, naming a Yaak alternative Fiak was too perfect to pass up.
 
 ## Included
 
@@ -19,8 +20,20 @@ I also wanted to learn how managing a patchset is done at the same time.
 - Rebranding to `Fiak` instead of `Yaak`
 - Build without the `license` feature
 
-Concerning releases, Fiak is updated whenever Yaak create a new release.
+## Versions
 
-## Develop
+Fiak is updated whenever Yaak creates a new release.
+This a manually done process. Please open an issue if I'm too slow to update Fiak.
+
+Fiak adds an additional number to the version which is the release count for this specific Yaak version.
+
+> For example, `v2025.9.3` will have its first Fiak version as `v2025.9.3.0`. If Fiak applies a new patch and release, it'll be `v2025.9.3.1`.
+
+## What did not change internally ?
+
+- `User-Agent` for the internal API since the plugin store requires the Yaak one to prevent us getting an Internal Server Error
+- `yaak` deep link scheme to keep Fiak compatible with Yaak integrations
+
+## Let's work together !
 
 Take a look at [CONTRIBUTING](./CONTRIBUTING.md) to know how to setup the repository.

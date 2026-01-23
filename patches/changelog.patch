@@ -50,7 +50,7 @@
    name: string;
    appDataDir: string;
    appLogDir: string;
-@@ -14,6 +15,10 @@
+@@ -15,6 +16,10 @@
  export const appInfo = {
    ...(await invokeCmd('cmd_metadata')),
    identifier: await getIdentifier(),
@@ -63,12 +63,12 @@
  console.log('App info', appInfo);
 --- a/yaak/src-web/lib/initGlobalListeners.tsx
 +++ b/yaak/src-web/lib/initGlobalListeners.tsx
-@@ -115,7 +115,7 @@
-               variant="border"
-               rightSlot={<Icon icon="external_link" />}
-               onClick={async () => {
--                await openUrl(`https://yaak.app/changelog/${version}`);
-+                await openUrl(`https://github.com/Vexcited/Fiak/releases/tag/v${version}`);
-               }}
-             >
-               What&apos;s New
+@@ -165,7 +165,7 @@
+           variant="border"
+           rightSlot={<Icon icon="external_link" />}
+           onClick={async () => {
+-            await openUrl(`https://yaak.app/changelog/${version}`);
++            await openUrl(`https://github.com/Vexcited/Fiak/releases/tag/v${version}`);
+           }}
+         >
+           What&apos;s New

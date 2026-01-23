@@ -1,26 +1,26 @@
---- a/yaak/src-tauri/src/updates.rs
-+++ b/yaak/src-tauri/src/updates.rs
+--- a/yaak/crates-tauri/yaak-app/src/updates.rs
++++ b/yaak/crates-tauri/yaak-app/src/updates.rs
 @@ -18,9 +18,7 @@
  use crate::error::Error::GenericError;
  use crate::is_dev;
- 
+
 -const MAX_UPDATE_CHECK_HOURS_STABLE: u64 = 12;
 -const MAX_UPDATE_CHECK_HOURS_BETA: u64 = 3;
 -const MAX_UPDATE_CHECK_HOURS_ALPHA: u64 = 1;
 +const MAX_UPDATE_CHECK_HOURS_NIGHTLY: u64 = 2;
- 
+
  // Create updater struct
  pub struct YaakUpdater {
 @@ -28,17 +26,13 @@
  }
- 
+
  pub enum UpdateMode {
 -    Stable,
 -    Beta,
 -    Alpha,
 +    Nightly,
  }
- 
+
  impl Display for UpdateMode {
      fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
          let s = match self {
@@ -44,11 +44,11 @@
  }
 @@ -81,7 +73,6 @@
          }
- 
+
          let settings = window.db().get_settings();
 -        let update_key = format!("{:x}", md5::compute(settings.id));
          self.last_check = Some(Instant::now());
- 
+
          info!("Checking for updates mode={} autodl={}", mode, auto_download);
 @@ -102,15 +93,6 @@
                      });
@@ -75,7 +75,7 @@
 -            UpdateMode::Alpha => MAX_UPDATE_CHECK_HOURS_ALPHA,
 +            UpdateMode::Nightly => MAX_UPDATE_CHECK_HOURS_NIGHTLY,
          } * (60 * 60);
- 
+
          if let Some(i) = self.last_check
 --- a/yaak/src-web/components/Settings/SettingsGeneral.tsx
 +++ b/yaak/src-web/components/Settings/SettingsGeneral.tsx
@@ -93,8 +93,8 @@
              ]}
            />
            <IconButton
---- a/yaak/src-tauri/yaak-models/src/queries/settings.rs
-+++ b/yaak/src-tauri/yaak-models/src/queries/settings.rs
+--- a/yaak/crates/yaak-models/src/queries/settings.rs
++++ b/yaak/crates/yaak-models/src/queries/settings.rs
 @@ -31,7 +31,7 @@
              proxy: None,
              theme_dark: "yaak-dark".to_string(),
@@ -104,8 +104,8 @@
              autoupdate: true,
              colored_methods: false,
              hide_license_badge: false,
---- a/yaak/src-tauri/yaak-models/migrations/20240118181105_channel_setting.sql
-+++ b/yaak/src-tauri/yaak-models/migrations/20240118181105_channel_setting.sql
+--- a/yaak/crates/yaak-models/migrations/20240118181105_channel_setting.sql
++++ b/yaak/crates/yaak-models/migrations/20240118181105_channel_setting.sql
 @@ -1 +1 @@
 -ALTER TABLE settings ADD COLUMN update_channel TEXT DEFAULT 'stable' NOT NULL;
 +ALTER TABLE settings ADD COLUMN update_channel TEXT DEFAULT 'nightly' NOT NULL;

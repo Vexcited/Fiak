@@ -1,5 +1,5 @@
---- a/yaak/src-tauri/tauri.release.conf.json
-+++ b/yaak/src-tauri/tauri.release.conf.json
+--- a/yaak/crates-tauri/yaak-app/tauri.release.conf.json
++++ b/yaak/crates-tauri/yaak-app/tauri.release.conf.json
 @@ -1,32 +1,15 @@
  {
    "build": {

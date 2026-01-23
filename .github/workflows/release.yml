@@ -101,6 +101,9 @@ jobs:
       - run: npm install
         working-directory: ./yaak
 
+      - run: npm run bootstrap
+        working-directory: ./yaak
+
       - run: npm run replace-version
         working-directory: ./yaak
         env:

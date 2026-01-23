@@ -1,6 +1,6 @@
 --- a/yaak/src-web/components/Settings/SettingsGeneral.tsx
 +++ b/yaak/src-web/components/Settings/SettingsGeneral.tsx
-@@ -80,14 +80,6 @@
+@@ -84,14 +84,6 @@
            help="Periodically ping Yaak servers to check for relevant notifications."
            onChange={(checkNotifications) => patchModel(settings, { checkNotifications })}
          />

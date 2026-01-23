@@ -2,6 +2,8 @@
   "files.eol": "\n",
   "prettier.enable": false,
   "editor.formatOnSave": false,
+  "files.trimFinalNewlines": false,
+  "files.trimTrailingWhitespace": false,
   "rust-analyzer.cargo.features": "all",
   "rust-analyzer.linkedProjects": [
     "yaak/src-tauri/Cargo.toml"
